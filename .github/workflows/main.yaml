@@ -1,0 +1,48 @@
+name: CI
+
+on:
+  push:
+    branches:
+      - main
+  pull_request: []
+
+jobs:
+  test:
+    name: Test Flux Compspec
+    runs-on: ubuntu-latest
+    container:
+      image: fluxrm/flux-sched:jammy
+      options: --user root
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+      - name: Dependencies
+        run: apt-get update && apt-get install -y python3-pip
+      - name: Install compspec
+        run: python3 -m pip install compspec
+      - name: Install compspec-ior
+        run: python3 -m pip install .
+      - name: Test extracting data
+        run: flux start --test-size=4 compspec extract flux
+      - name: Test Python Standalone
+        run: flux start --test-size=4 python3 ./examples/singleton-run.py
+
+  formatting:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v4
+
+    - name: Setup black linter
+      run: conda create --quiet --name black pyflakes
+
+    - name: Check Spelling
+      uses: crate-ci/typos@7ad296c72fa8265059cc03d1eda562fbdfcd6df2 # v1.9.0
+      with:
+        files: ./README.md
+
+    - name: Lint and format Python code
+      run: |
+        export PATH="/usr/share/miniconda/bin:$PATH"
+        source activate black
+        pip install -r .github/dev-requirements.txt
+        pre-commit run --all-files

@@ -42,37 +42,61 @@ compspec extract flux
 
 ```console
 {
-    "0": {
-        "id": 0,
-        "metadata": {
-            "type": "cluster",
-            "basename": "cluster",
-            "name": "cluster0",
-            "uniq_id": 0,
-            "containment": {
-                "paths": "/cluster0"
+    "graph": {
+        "nodes": {
+            "0": {
+                "id": 0,
+                "metadata": {
+                    "type": "cluster",
+                    "basename": "cluster",
+                    "name": "cluster0",
+                    "uniq_id": 0,
+                    "containment": {
+                        "paths": "/cluster0"
+                    },
+                    "size": 1,
+                    "unit": "",
+                    "rank": 0,
+                    "exclusive": false
+                }
             },
-            "size": 1,
-            "unit": "",
-            "rank": 0,
-            "exclusive": false
-        }
-    },
-    "1": {
-        "id": 1,
-        "metadata": {
-            "type": "node",
-            "basename": "node",
-            "name": "node1",
-            "uniq_id": 1,
-            "containment": {
-                "paths": "/cluster0/node1"
+            "1": {
+                "id": 1,
+                "metadata": {
+                    "type": "node",
+                    "basename": "node",
+                    "name": "node1",
+                    "uniq_id": 1,
+                    "containment": {
+                        "paths": "/cluster0/node1"
+                    },
+                    "size": 1,
+                    "unit": "",
+                    "rank": 0,
+                    "exclusive": false
+                }
+            }
+        },
+        "edges": [
+            {
+                "source": "0",
+                "target": "1",
+                "metadata": {
+                    "name": {
+                        "containment": "contains"
+                    }
+                }
             },
-            "size": 1,
-            "unit": "",
-            "rank": 0,
-            "exclusive": false
-        }
+            {
+                "source": "1",
+                "target": "0",
+                "metadata": {
+                    "name": {
+                        "containment": "in"
+                    }
+                }
+            }
+        ]
     }
 }
 ```
@@ -84,7 +108,6 @@ And how to save to file
 ```bash
 compspec extract --outfile cluster-resources.json flux
 ```
-
 
 ## License
 
